@@ -1,10 +1,10 @@
 import "./App.css";
 import { Card, Checkbox, Input } from "antd";
-import { useToDoStore } from "./model/todoStore";
+import { markAsCompleted, useToDoStore } from "./model/todoStore";
 import { useState } from "react";
 
 function App() {
-  const { todos, addTodo, markAsCompleted } = useToDoStore();
+  const { todos, addTodo } = useToDoStore();
   const [value, setValue] = useState<string>("");
   return (
     <div className="wrapper">
