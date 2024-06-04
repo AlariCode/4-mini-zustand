@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { CoffeeQueryParams } from "../types/coffeTypes";
+import { CoffeeQueryParams, CoffeeType } from "../types/coffeTypes";
 
 import { devtools, persist } from "zustand/middleware";
 
@@ -28,3 +28,16 @@ export const useCoffeeStore = create<
 
 export const getCoffeeList = (params?: CoffeeQueryParams) =>
   useCoffeeStore.getState().getCoffeeList(params);
+
+export const addToCart = (item: CoffeeType) =>
+  useCoffeeStore.getState().addToCart(item);
+
+export const orderCoffee = () => useCoffeeStore.getState().orderCoffee();
+
+export const setAddress = (address: string) =>
+  useCoffeeStore.getState().setAddress(address);
+
+export const clearCart = () => useCoffeeStore.getState().clearCart();
+
+export const setParams = (params: CoffeeQueryParams) =>
+  useCoffeeStore.getState().setParams(params);
