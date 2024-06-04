@@ -1,7 +1,8 @@
-import { create, StateCreator } from "zustand";
+import { StateCreator } from "zustand";
 import { devtools } from "zustand/middleware";
+import { create } from "../helpers/create";
 
-type ToDoType = {
+export type ToDoType = {
   title: string;
   isCompleted: boolean;
 };
@@ -20,9 +21,10 @@ const toDoSlice: StateCreator<
   [["zustand/devtools", never]]
 > = (set, get) => ({
   todos: [],
-  addTodo: (title: string) => {
-    const { todos } = get();
+  addTodo: async (title: string) => {
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
+    const { todos } = get();
     set(
       { todos: [...todos, { title, isCompleted: false }] },
       false,
