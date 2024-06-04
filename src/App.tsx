@@ -3,6 +3,8 @@ import { Button, Card, Input, Rate, Tag } from "antd";
 import { useCoffeeStore } from "./model/coffeeStore";
 import { useEffect, useState } from "react";
 import { ShoppingCartOutlined } from "@ant-design/icons";
+import { useCounterStore } from "./model/counterStore";
+import { addTen } from "./helpers/addTen";
 
 function App() {
   const { getCoffeeList, coffeeList } = useCoffeeStore();
@@ -15,9 +17,15 @@ function App() {
     getCoffeeList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const { counter, decrement, increment, persistedCounter } = useCounterStore();
   return (
     <div className="wrapper">
-      <Input
+      <button onClick={decrement}>-</button>
+      <span>{counter}</span>
+      <span>{persistedCounter}</span>
+      <button onClick={increment}>+</button>
+      {/* <Input
         placeholder="Search"
         value={text}
         onChange={(e) => handleSearch(e.target.value)}
@@ -48,7 +56,7 @@ function App() {
             </Card>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 }

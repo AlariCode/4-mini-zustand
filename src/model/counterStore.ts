@@ -1,7 +1,9 @@
 import { create, StateCreator } from "zustand";
+import { persist } from "zustand/middleware";
 
 type counterState = {
   counter: number;
+  persistedCounter: number;
 };
 
 type counterActions = {
@@ -12,20 +14,22 @@ type counterActions = {
 
 const initialState: counterState = {
   counter: 0,
+  persistedCounter: 0,
 };
 
-const counterSlice: StateCreator<counterState & counterActions> = (
-  set,
-  get
-) => ({
+const counterSlice: StateCreator<
+  counterState & counterActions,
+  [["zustand/persist", unknown]]
+> = (set, get) => ({
   counter: initialState.counter,
+  persistedCounter: initialState.persistedCounter,
   decrement: () => {
-    const { counter } = get();
-    set({ counter: counter - 1 });
+    const { counter, persistedCounter } = get();
+    set({ counter: counter - 1, persistedCounter: persistedCounter - 1 });
   },
   increment: () => {
-    const { counter } = get();
-    set({ counter: counter + 1 });
+    const { counter, persistedCounter } = get();
+    set({ counter: counter + 1, persistedCounter: persistedCounter + 1 });
   },
   incrementByAmount: (value: number) => {
     const { counter } = get();
@@ -33,9 +37,10 @@ const counterSlice: StateCreator<counterState & counterActions> = (
   },
 });
 
-export const useCounterStore = create<counterState & counterActions>(
-  (...args) => ({
-    ...counterSlice(...args),
+export const useCounterStore = create<counterState & counterActions>()(
+  persist((...args) => ({ ...counterSlice(...args) }), {
+    name: "counterStore",
+    partialize: (state) => ({ persistedCounter: state.persistedCounter }),
   })
 );
 
