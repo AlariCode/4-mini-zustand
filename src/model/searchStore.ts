@@ -1,7 +1,7 @@
 import { StateCreator, create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 import { getCoffeeList } from "./coffeeStore";
-import { hashStorage } from "../helpers/hashStorage";
+import { hashStorage } from "./helpers/hashStorage";
 
 type SearchState = {
   text: string;
