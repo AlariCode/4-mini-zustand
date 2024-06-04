@@ -1,33 +1,44 @@
 import "./App.css";
-import { Card, Checkbox, Input } from "antd";
-import { markAsCompleted, useToDoStore } from "./model/todoStore";
-import { useState } from "react";
+import { Button, Card, Rate, Tag } from "antd";
+import { useCoffeeStore } from "./model/coffeeStore";
+import { useEffect } from "react";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 
 function App() {
-  const { todos, addTodo } = useToDoStore();
-  const [value, setValue] = useState<string>("");
+  const { getCoffeeList, coffeeList } = useCoffeeStore();
+  useEffect(() => {
+    getCoffeeList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div className="wrapper">
-      <Input
-        style={{ width: 300 }}
-        onChange={(e) => setValue(e.target.value)}
-        value={value}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            addTodo(value);
-            setValue("");
-          }
-        }}
-      />
-      {todos.map((todo, index) => (
-        <Card className="card" key={todo.title}>
-          <Checkbox
-            checked={todo.isCompleted}
-            onChange={() => markAsCompleted(index)}
-          />
-          <span>{todo.title}</span>
-        </Card>
-      ))}
+      {coffeeList && (
+        <div className="cardsContainer">
+          {coffeeList.map((coffee) => (
+            <Card
+              hoverable
+              key={coffee.id}
+              cover={<img src={coffee.image} />}
+              actions={[
+                <Button icon={<ShoppingCartOutlined />} key={coffee.name}>
+                  {coffee.price}
+                </Button>,
+              ]}
+            >
+              <Card.Meta title={coffee.name} description={coffee.subTitle} />
+              <Tag style={{ marginTop: "24px" }} color="purple">
+                {coffee.type}
+              </Tag>
+              <Rate
+                defaultValue={coffee.rating}
+                disabled
+                allowHalf
+                style={{ marginTop: "24px" }}
+              />
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
