@@ -1,5 +1,5 @@
 import { create, StateCreator } from "zustand";
-import { CoffeeType } from "../types/coffeTypes";
+import { CoffeeQueryParams, CoffeeType } from "../types/coffeTypes";
 import axios, { AxiosError } from "axios";
 import { devtools } from "zustand/middleware";
 
@@ -7,22 +7,40 @@ const BASE_URL = "https://purpleschool.ru/coffee-api/";
 
 type CoffeeState = {
   coffeeList?: CoffeeType[];
+  controller?: AbortController;
 };
 
 type CoffeeActions = {
-  getCoffeeList: () => void;
+  getCoffeeList: (params?: CoffeeQueryParams) => void;
 };
 
 const coffeeSlice: StateCreator<
   CoffeeActions & CoffeeState,
   [["zustand/devtools", never]]
-> = (set) => ({
+> = (set, get) => ({
   coffeeList: undefined,
-  getCoffeeList: async () => {
+  controller: undefined,
+
+  getCoffeeList: async (params?: CoffeeQueryParams) => {
+    const { controller } = get();
+
+    if (controller) {
+      controller.abort();
+    }
+
+    const newController = new AbortController();
+    set({ controller: newController });
+    const { signal } = newController;
+
     try {
-      const { data } = await axios.get<CoffeeType[]>(BASE_URL, {});
-      set({ coffeeList: data }, false, "setCoffeeList");
+      const { data } = await axios.get<CoffeeType[]>(BASE_URL, {
+        params,
+        signal,
+      });
+      set({ coffeeList: data }, false, "setCoffeeListWithSearch");
     } catch (error) {
+      if (axios.isCancel(error)) return;
+
       if (error instanceof AxiosError) {
         console.log(error);
       }

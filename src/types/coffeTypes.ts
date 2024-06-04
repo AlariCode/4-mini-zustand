@@ -6,8 +6,8 @@ export enum CoffeeTypeEnum {
 }
 
 export type CoffeeQueryParams = {
-  text: string;
-  type: CoffeeTypeEnum;
+  text?: string;
+  type?: CoffeeTypeEnum;
 };
 
 export type CoffeeType = {

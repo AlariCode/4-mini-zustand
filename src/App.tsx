@@ -1,17 +1,27 @@
 import "./App.css";
-import { Button, Card, Rate, Tag } from "antd";
+import { Button, Card, Input, Rate, Tag } from "antd";
 import { useCoffeeStore } from "./model/coffeeStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 
 function App() {
   const { getCoffeeList, coffeeList } = useCoffeeStore();
+  const [text, setText] = useState<string>("");
+  const handleSearch = (text: string) => {
+    setText(text);
+    getCoffeeList({ text });
+  };
   useEffect(() => {
     getCoffeeList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div className="wrapper">
+      <Input
+        placeholder="Search"
+        value={text}
+        onChange={(e) => handleSearch(e.target.value)}
+      />
       {coffeeList && (
         <div className="cardsContainer">
           {coffeeList.map((coffee) => (
