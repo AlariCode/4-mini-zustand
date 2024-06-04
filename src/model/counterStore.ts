@@ -1,5 +1,6 @@
-import { create, StateCreator } from "zustand";
+import { StateCreator } from "zustand";
 import { persist } from "zustand/middleware";
+import { create } from "../helpers/create";
 
 type counterState = {
   counter: number;
@@ -10,6 +11,7 @@ type counterActions = {
   increment: () => void;
   decrement: () => void;
   incrementByAmount: (value: number) => void;
+  reset: () => void;
 };
 
 const initialState: counterState = {
@@ -34,6 +36,9 @@ const counterSlice: StateCreator<
   incrementByAmount: (value: number) => {
     const { counter } = get();
     set({ counter: counter + value });
+  },
+  reset: () => {
+    set(initialState);
   },
 });
 
