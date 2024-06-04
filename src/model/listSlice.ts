@@ -21,7 +21,8 @@ export const listSlice: StateCreator<
 
   setParams: (params) => {
     const { getCoffeeList } = get();
-    set({ params: { ...get().params, ...params } }), getCoffeeList(params);
+    set({ params: { ...get().params, ...params } });
+    getCoffeeList(get().params);
   },
 
   getCoffeeList: async (params?: CoffeeQueryParams) => {

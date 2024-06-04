@@ -3,14 +3,13 @@ import { SearchInput } from "./components/SearchInput";
 import { CoffeList } from "./components/CoffeeList";
 import { Cart } from "./components/Cart";
 import { CartActions } from "./components/CartActions";
-
-// import { useSearchStore } from "../model/searchStore";
+import { CategoryPicker } from "./components/CategoryPicker";
 
 function App() {
   return (
     <div className="wrapper">
-      <a href="/about">About</a>
       <SearchInput />
+      <CategoryPicker />
       <div className="container">
         <CoffeList />
         <aside className="sider">
