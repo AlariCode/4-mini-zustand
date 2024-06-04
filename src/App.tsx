@@ -3,13 +3,18 @@ import { Button, Card, Input, Rate, Tag } from "antd";
 import { useCoffeeStore } from "./model/coffeeStore";
 import { useEffect, useState } from "react";
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import { useCounterStore } from "./model/counterStore";
-import { addTen } from "./helpers/addTen";
-import { resetAllStores } from "./helpers/create";
-import { useToDoStore } from "./model/todoStore";
 
 function App() {
-  const { getCoffeeList, coffeeList } = useCoffeeStore();
+  const {
+    getCoffeeList,
+    coffeeList,
+    cart,
+    addToCart,
+    orderCoffee,
+    setAddress,
+    address,
+    clearCart,
+  } = useCoffeeStore();
   const [text, setText] = useState<string>("");
   const handleSearch = (text: string) => {
     setText(text);
@@ -20,50 +25,70 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { counter, decrement, increment, persistedCounter } = useCounterStore();
-  const { addTodo, todos } = useToDoStore();
   return (
     <div className="wrapper">
-      <button onClick={decrement}>-</button>
-      <span>{counter}</span>
-      <span>{persistedCounter}</span>
-      <button onClick={increment}>+</button>
-      <button onClick={resetAllStores}>reset</button>
-      <hr />
-      <button onClick={() => addTodo("some")}>addTodo</button>
-      {todos && todos.map((todo) => <div key={todo.title}>{todo.title}</div>)}
-      {/* <Input
+      <Input
         placeholder="Search"
         value={text}
         onChange={(e) => handleSearch(e.target.value)}
       />
-      {coffeeList && (
-        <div className="cardsContainer">
-          {coffeeList.map((coffee) => (
-            <Card
-              hoverable
-              key={coffee.id}
-              cover={<img src={coffee.image} />}
-              actions={[
-                <Button icon={<ShoppingCartOutlined />} key={coffee.name}>
-                  {coffee.price}
-                </Button>,
-              ]}
-            >
-              <Card.Meta title={coffee.name} description={coffee.subTitle} />
-              <Tag style={{ marginTop: "24px" }} color="purple">
-                {coffee.type}
-              </Tag>
-              <Rate
-                defaultValue={coffee.rating}
-                disabled
-                allowHalf
-                style={{ marginTop: "24px" }}
+      <div className="container">
+        {coffeeList ? (
+          <div className="cardsContainer">
+            {coffeeList.map((coffee) => (
+              <Card
+                hoverable
+                key={coffee.id}
+                cover={<img src={coffee.image} />}
+                actions={[
+                  <Button
+                    icon={<ShoppingCartOutlined />}
+                    key={coffee.name}
+                    onClick={() => addToCart(coffee)}
+                  >
+                    {coffee.price}
+                  </Button>,
+                ]}
+              >
+                <Card.Meta title={coffee.name} description={coffee.subTitle} />
+                <Tag style={{ marginTop: "24px" }} color="purple">
+                  {coffee.type}
+                </Tag>
+                <Rate
+                  defaultValue={coffee.rating}
+                  disabled
+                  allowHalf
+                  style={{ marginTop: "24px" }}
+                />
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <span>По запросу не нашлось ни одного напитка</span>
+        )}
+
+        <aside className="sider">
+          <h1>Cart</h1>
+          {cart ? (
+            <>
+              {cart.map((item) => (
+                <span key={item.id}>{item.name}</span>
+              ))}
+              <Input
+                placeholder="Adress"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
               />
-            </Card>
-          ))}
-        </div>
-      )} */}
+              <Button onClick={orderCoffee} disabled={!address} type="primary">
+                Order coffee
+              </Button>
+              <Button onClick={clearCart}>Clear cart</Button>
+            </>
+          ) : (
+            <span>Your cart is empty</span>
+          )}
+        </aside>
+      </div>
     </div>
   );
 }
