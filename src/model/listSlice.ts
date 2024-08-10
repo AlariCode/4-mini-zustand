@@ -7,7 +7,7 @@ import {
 } from "./storeTypes";
 import { CoffeeQueryParams, CoffeeType } from "../types/coffeTypes";
 import axios, { AxiosError } from "axios";
-import { BASE_URL } from "../api/baseUrl";
+import { BASE_URL } from "../api/CoreApi";
 
 export const listSlice: StateCreator<
   CoffeeListActions & CoffeeListState & CoffeeCartActions & CoffeeCartState,

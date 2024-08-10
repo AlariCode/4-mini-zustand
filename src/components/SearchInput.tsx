@@ -4,7 +4,7 @@ import { useUrlParamsStore } from "../helpers/useUrlStorage";
 
 export const SearchInput = () => {
   const [params] = useCoffeeStore((state) => [state.params]);
-  useUrlParamsStore();
+  useUrlParamsStore(params, setParams);
 
   return (
     <Input

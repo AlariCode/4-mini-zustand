@@ -1,4 +1,4 @@
-import "../App.css";
+import "./App.css";
 import { SearchInput } from "./components/SearchInput";
 import { CoffeList } from "./components/CoffeeList";
 import { Cart } from "./components/Cart";
