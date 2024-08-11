@@ -4,9 +4,8 @@ import { CoffeeCard } from "./CoffeeCard";
 import "../App.css";
 
 export const CoffeList = () => {
-  const [coffeeList] = useCoffeeStore(
-    useShallow((state) => [state.coffeeList])
-  );
+  const [coffeeList] = useCoffeeStore(useShallow((s) => [s.coffeeList]));
+
   return (
     <>
       {coffeeList ? (

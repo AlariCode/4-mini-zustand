@@ -6,7 +6,7 @@ export const useUrlParamsStore = <T extends Record<string, string>>(
   setParams: (params: T) => void
 ) => {
   const [queryParams, setQueryParams] = useSearchParams();
-
+  
   const setParamsFromUrl = () => {
     const paramsFromUrl: Partial<T> = Object.keys(params).reduce((acc, key) => {
       const value = queryParams.get(key);
@@ -24,7 +24,12 @@ export const useUrlParamsStore = <T extends Record<string, string>>(
 
   useEffect(() => {
     const newQueryParams = new URLSearchParams();
-    params.text && newQueryParams.set("text", params.text);
+    Object.keys(params).forEach((key) => {
+      const value = params[key];
+      if (value) {
+        newQueryParams.set(key, value);
+      }
+    });
     setQueryParams(newQueryParams);
   }, [params]);
 };

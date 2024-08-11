@@ -6,7 +6,7 @@ import {
   CoffeeListState,
 } from "./storeTypes";
 import { CoffeeQueryParams, CoffeeType } from "../types/coffeTypes";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { BASE_URL } from "../api/CoreApi";
 
 export const listSlice: StateCreator<
@@ -20,9 +20,7 @@ export const listSlice: StateCreator<
   params: { text: undefined, type: undefined },
 
   setParams: (params) => {
-    const { getCoffeeList } = get();
     set({ params: { ...get().params, ...params } });
-    getCoffeeList(get().params);
   },
 
   getCoffeeList: async (params?: CoffeeQueryParams) => {
@@ -35,19 +33,11 @@ export const listSlice: StateCreator<
     const newController = new AbortController();
     set({ controller: newController });
     const { signal } = newController;
-
-    try {
-      const { data } = await axios.get<CoffeeType[]>(BASE_URL, {
-        params,
-        signal,
-      });
-      set({ coffeeList: data }, false, "setCoffeeListWithSearch");
-    } catch (error) {
-      if (axios.isCancel(error)) return;
-
-      if (error instanceof AxiosError) {
-        console.log(error);
-      }
-    }
+    const { data } = await axios.get<CoffeeType[]>(BASE_URL, {
+      params,
+      signal,
+    });
+    set({ coffeeList: data });
+    return data;
   },
 });

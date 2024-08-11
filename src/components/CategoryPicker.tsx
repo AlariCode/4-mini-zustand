@@ -5,17 +5,18 @@ import { useShallow } from "zustand/react/shallow";
 
 export const CategoryPicker = () => {
   const [params] = useCoffeeStore(useShallow((state) => [state.params]));
+
   return (
     <div>
       {Object.keys(CoffeeTypeEnum).map((key) => (
         <Button
           key={key}
           danger={params.type === key}
-          onClick={() =>
+          onClick={() => {
             setParams({
               type: CoffeeTypeEnum[key as keyof typeof CoffeeTypeEnum],
-            })
-          }
+            });
+          }}
         >
           {key}
         </Button>
