@@ -11,15 +11,19 @@ import {
 } from "./storeTypes";
 import { listSlice } from "./listSlice";
 import { cartSlice } from "./cartSlice";
+import { immer } from "zustand/middleware/immer";
 
 export const useCoffeeStore = create<
   CoffeeListActions & CoffeeListState & CoffeeCartActions & CoffeeCartState
 >()(
   devtools(
-    persist((...args) => ({ ...listSlice(...args), ...cartSlice(...args) }), {
-      name: "coffeeStore",
-      partialize: (state) => ({ cart: state.cart, address: state.address }),
-    }),
+    persist(
+      immer((...args) => ({ ...listSlice(...args), ...cartSlice(...args) })),
+      {
+        name: "coffeeStore",
+        partialize: (state) => ({ cart: state.cart, address: state.address }),
+      }
+    ),
     {
       name: "coffeeStore",
     }

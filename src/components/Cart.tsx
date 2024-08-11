@@ -8,8 +8,10 @@ export const Cart = () => {
     <>
       {cart ? (
         <>
-          {cart.map((item) => (
-            <span key={item.id}>{item.name}</span>
+          {cart.map((item, index) => (
+            <span key={item.id + index + item.name}>{`${item.name}${
+              item.quantity > 1 ? ` x ${item.quantity}` : ""
+            }`}</span>
           ))}
         </>
       ) : (
